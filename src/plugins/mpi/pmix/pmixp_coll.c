@@ -619,6 +619,8 @@ static void _progress_fan_in(pmixp_coll_t *coll)
 			 */
 			coll->cbfunc(PMIX_ERROR, NULL, 0, coll->cbdata, NULL, NULL);
 		}
+	} else {
+		_sent_complete_cb(SLURM_SUCCESS, PMIXP_SRV_CB_INLINE, coll);
 	}
 
 	/* release the endpoint */
