@@ -40,7 +40,7 @@
 #include "pmixp_common.h"
 #include "pmixp_debug.h"
 
-#define PMIXP_COLL_DEBUG 1
+#define PMIXP_COLL_DEBUG 0
 
 typedef enum {
 	PMIXP_COLL_SYNC,
