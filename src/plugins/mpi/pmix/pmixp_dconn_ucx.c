@@ -148,6 +148,8 @@ static int _ucx_send(void *_priv, void *msg);
 static void _ucx_regio(eio_handle_t *h);
 static void *_ucx_lib_handler = NULL;
 
+#define PMIXP_UCX_TX_GROW "16"
+
 static int _load_ucx_lib()
 {
 	/* At the time of writing this UCX doesn't support
@@ -160,6 +162,14 @@ static int _load_ucx_lib()
 	setenv("UCX_MEM_MALLOC_HOOKS", "no", 1);
 	setenv("UCX_MEM_MALLOC_RELOC", "no", 1);
 	setenv("UCX_MEM_EVENTS", "no", 1);
+
+	setenv("UCX_RC_VERBS_TX_BUFS_GROW", PMIXP_UCX_TX_GROW, 1);
+	setenv("UCX_RC_MLX5_TX_BUFS_GROW",  PMIXP_UCX_TX_GROW, 1);
+	setenv("UCX_DC_VERBS_TX_BUFS_GROW", PMIXP_UCX_TX_GROW, 1);
+	setenv("UCX_DC_MLX5_TX_BUFS_GROW",  PMIXP_UCX_TX_GROW, 1);
+	setenv("UCX_UD_VERBS_TX_BUFS_GROW", PMIXP_UCX_TX_GROW, 1);
+	setenv("UCX_UD_MLX5_TX_BUFS_GROW",  PMIXP_UCX_TX_GROW, 1);
+
 
 #ifdef PMIXP_UCX_LIBPATH
 	/* If this SLURM build doesn't allow RPATH's
