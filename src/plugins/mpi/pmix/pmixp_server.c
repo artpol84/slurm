@@ -1297,15 +1297,9 @@ static void *_wireup_thread(void *args)
 	pmixp_ep_t ep = {0};
 	int rc, i;
 	hostlist_t hl = slurm_hostlist_create(NULL);
-	int node_count;
 	char *dbg_message = NULL;
-	xstrfmtcat(dbg_message, "WIREUP/early: sending initiation message to nodeids: ");
+	xstrfmtcat(dbg_message, " ");
 
-	if(0 == obj->node_count) {
-		/* There are no nodes to send! */
-		PMIXP_DEBUG("%s", dbg_message);
-		goto exit;
-	}
 
 	/* Setup addressing information in the broadcast message */
 	for(i = 0; i < obj->node_count; i++) {
@@ -1319,22 +1313,24 @@ static void *_wireup_thread(void *args)
 		}
 		pmixp_dconn_unlock(dconn);
 	}
-	ep.type = PMIXP_EP_HLIST;
-	ep.ep.hostlist = slurm_hostlist_ranged_string_xmalloc(hl);
-	slurm_hostlist_destroy(hl);
 
-	/* Prepare message content */
-	buf = pmixp_server_buf_new();
-	PMIXP_BASE_HDR_SETUP(bhdr, PMIXP_MSG_INIT_DIRECT, /* unused */ 0, buf);
+	PMIXP_DEBUG("WIREUP/early: sending initiation message to %d nodes:%s",
+		    slurm_hostlist_count(hl), dbg_message);
+	if( slurm_hostlist_count(hl) ) {
+		ep.type = PMIXP_EP_HLIST;
+		ep.ep.hostlist = slurm_hostlist_ranged_string_xmalloc(hl);
+		/* Prepare message content */
+		buf = pmixp_server_buf_new();
+		PMIXP_BASE_HDR_SETUP(bhdr, PMIXP_MSG_INIT_DIRECT, /* unused */ 0, buf);
 
-	PMIXP_DEBUG("%s", dbg_message);
-	rc = _slurm_send(&ep, bhdr, buf);
-	FREE_NULL_BUFFER(buf);
 
-	if (SLURM_SUCCESS != rc) {
-		PMIXP_ERROR_STD("send init msg error");
+		rc = _slurm_send(&ep, bhdr, buf);
+		FREE_NULL_BUFFER(buf);
+		if (SLURM_SUCCESS != rc) {
+			PMIXP_ERROR_STD("send init msg error");
+		}
 	}
-exit:
+	slurm_hostlist_destroy(hl);
 	PMIXP_DEBUG("WIREUP/early: complete");
 	return NULL;
 }
