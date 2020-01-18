@@ -1297,8 +1297,15 @@ static void *_wireup_thread(void *args)
 	pmixp_ep_t ep = {0};
 	int rc, i;
 	hostlist_t hl = slurm_hostlist_create(NULL);
+	int node_count;
 	char *dbg_message = NULL;
 	xstrfmtcat(dbg_message, "WIREUP/early: sending initiation message to nodeids: ");
+
+	if(0 == obj->node_count) {
+		/* There are no nodes to send! */
+		PMIXP_DEBUG("%s", dbg_message);
+		goto exit;
+	}
 
 	/* Setup addressing information in the broadcast message */
 	for(i = 0; i < obj->node_count; i++) {
@@ -1327,6 +1334,7 @@ static void *_wireup_thread(void *args)
 	if (SLURM_SUCCESS != rc) {
 		PMIXP_ERROR_STD("send init msg error");
 	}
+exit:
 	PMIXP_DEBUG("WIREUP/early: complete");
 	return NULL;
 }
