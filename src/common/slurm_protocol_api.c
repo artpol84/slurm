@@ -5345,6 +5345,8 @@ extern int slurm_forward_data(
 			temp_rc = slurm_get_return_code(ret_data_info->type,
 							ret_data_info->data);
 			if (temp_rc != SLURM_SUCCESS) {
+				debug("Got failure from node %s, rc = %d",
+				      ret_data_info->node_name, temp_rc);
 				rc = temp_rc;
 				if (redo_nodelist) {
 					if (!hl)

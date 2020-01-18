@@ -345,10 +345,10 @@ int pmixp_stepd_send(const char *nodelist, const char *address,
 	char *copy_of_nodelist = xstrdup(nodelist);
 
 	while (1) {
-		if (retry >= 1) {
+//		if (retry >= 1) {
 			PMIXP_DEBUG("retransmit from \"%s\". attempt #%d; rc=%d; targets=%s",
 				    debugid, retry, rc, copy_of_nodelist);
-		}
+//		}
 
 		rc = slurm_forward_data(&copy_of_nodelist, (char *)address,
 					len, data);
