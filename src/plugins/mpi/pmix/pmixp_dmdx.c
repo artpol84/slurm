@@ -244,6 +244,10 @@ int pmixp_dmdx_get(const char *nspace, int rank,
 	/* need to send the request */
 	ep.type = PMIXP_EP_NOIDEID;
 	ep.ep.nodeid = pmixp_nspace_resolve(nspace, rank);
+	if (SLURM_ERROR == ep.ep.nodeid) {
+		/* Couldn't resolve the namespace */
+		return SLURM_ERROR;
+	}
 
 	buf = pmixp_server_buf_new();
 	/* setup message header */
@@ -458,6 +462,10 @@ void pmixp_dmdx_timeout_cleanup(void)
 			/* respond with the timeout to libpmix */
 			int nodeid = pmixp_nspace_resolve(req->nspace,
 							  req->rank);
+			if (SLURM_ERROR == nodeid) {
+				/* Couldn't resolve the namespace */
+				continue;
+			}
 			char *nodename = pmixp_info_job_host(nodeid);
 			xassert(NULL != nodename);
 			PMIXP_ERROR("timeout: ns=%s, rank=%d, host=%s, ts=%lu",
