@@ -357,6 +357,16 @@ static void _set_topology(List lresp)
 	PMIX_VAL_SET(&kvp->value, string, p);
 	list_append(lresp, kvp);
 
+#if HWLOC_API_VERSION < 0x00020000
+	PMIXP_ALLOC_KEY(kvp, PMIX_HWLOC_XML_V1);
+	PMIX_VAL_SET(&kvp->value, string, p);
+	list_append(lresp, kvp);
+#else
+	PMIXP_ALLOC_KEY(kvp, PMIX_HWLOC_XML_V2);
+	PMIX_VAL_SET(&kvp->value, string, p);
+	list_append(lresp, kvp);
+#endif
+
 	/* successful exit - fallthru */
 err_release_topo:
 	hwloc_topology_destroy(topology);
