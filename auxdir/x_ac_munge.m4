@@ -16,7 +16,7 @@
 
 AC_DEFUN([X_AC_MUNGE], [
 
-  _x_ac_munge_dirs="/usr /usr/local /opt/freeware /opt/munge"
+  _x_ac_munge_dirs="/ /usr /usr/local /opt/freeware /opt/munge"
   _x_ac_munge_libs="lib64 lib"
 
   AC_ARG_WITH(
