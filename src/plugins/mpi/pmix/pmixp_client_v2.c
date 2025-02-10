@@ -208,7 +208,7 @@ static void _errhandler(size_t evhdlr_registration_id,
 {
 	/* TODO: do something more sophisticated here */
 	/* FIXME: use proper specificator for nranges */
-	PMIXP_ERROR("Error handler invoked: status = %d, source = [%s:%d]",
+	PMIXP_ERROR("NEW!!!!!! Error handler invoked: status = %d, source = [%s:%d]",
 		    (int) status, source->nspace, source->rank);
 //	slurm_kill_job_step(pmixp_info_jobid(), pmixp_info_stepid(), SIGKILL,
 //			    0);
